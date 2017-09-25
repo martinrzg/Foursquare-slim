@@ -1,4 +1,4 @@
-package com.example.martinruiz.foursquare;
+package com.example.martinruiz.foursquare.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.martinruiz.foursquare.R;
 import com.foursquare.android.nativeoauth.FoursquareCancelException;
 import com.foursquare.android.nativeoauth.FoursquareDenyException;
 import com.foursquare.android.nativeoauth.FoursquareInvalidRequestException;
@@ -20,14 +21,16 @@ import com.foursquare.android.nativeoauth.FoursquareUnsupportedVersionException;
 import com.foursquare.android.nativeoauth.model.AccessTokenResponse;
 import com.foursquare.android.nativeoauth.model.AuthCodeResponse;
 
+import static com.example.martinruiz.foursquare.API.API.CLIENT_ID;
+import static com.example.martinruiz.foursquare.API.API.CLIENT_SECRET;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_FSQ_CONNECT = 200;
     private static final int REQUEST_CODE_FSQ_TOKEN_EXCHANGE = 201;
     private SharedPreferences preferences;
 
-    private static final String CLIENT_ID = "P0YHT1Y3HVLS45CIGFH3N11MD0S5XXBXOTQF1VAOELDMYGAY";
-    private static final String CLIENT_SECRET = "0VSA31KFPJWGZPYGFBITIPZF5ZJCBQ14U5NNDVAAUVFNYOUN\n";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +106,8 @@ public class LoginActivity extends AppCompatActivity {
         tvMessage.setVisibility(isAuthorized ? View.VISIBLE : View.GONE);
 
         if(isAuthorized){
-            Intent intent = new Intent();
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            startActivity(intent);
         }
 
         Button btnLogin = findViewById(R.id.btnLogin);
