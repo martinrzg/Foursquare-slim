@@ -2,6 +2,7 @@ package com.example.martinruiz.foursquare.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -14,24 +15,22 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.example.martinruiz.foursquare.API.API;
 import com.example.martinruiz.foursquare.API.APIServices.FoursquareServices;
 import com.example.martinruiz.foursquare.R;
 import com.example.martinruiz.foursquare.adapters.VenuesAdapter;
-import com.example.martinruiz.foursquare.models.Venue;
+import com.example.martinruiz.foursquare.models.nearVenuesResponse.NearVenuesResponse;
+import com.example.martinruiz.foursquare.models.nearVenuesResponse.Venue;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,14 +46,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private Location location;
     private SharedPreferences preferences;
     private FoursquareServices services;
-    private FoursquareServices services2;
 
     private String token;
     private List<Venue> venues;
+    private NearVenuesResponse venuesResponse;
     @BindView(R.id.recyclerViewVenueCards) RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-
 
 
     @Override
@@ -67,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
         services = API.getApi().create(FoursquareServices.class);
-        services2 = API.getApi2().create(FoursquareServices.class);
 
         preferences = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         token = preferences.getString("token", null);
@@ -78,19 +75,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
 
         layoutManager = new LinearLayoutManager(this);
-        adapter = new VenuesAdapter(venues, R.layout.venue_card, this, new VenuesAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Venue venue, int position, View view) {
-                Toast.makeText(MainActivity.this, venue.getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-
-
     }
 
     @Override
@@ -122,25 +110,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private void retrieveVenus() {
         String ll = location.getLatitude() + "," + location.getLongitude();
-        final Call<Venue> venuesCall = services.getNearVenues(ll, 1, token, API.API_VERSION, 2);
+        final Call<NearVenuesResponse> venuesCall = services.getNearVenues(ll, 1, token, API.API_VERSION);
 
-        venuesCall.enqueue(new Callback<Venue>() {
+        venuesCall.enqueue(new Callback<NearVenuesResponse>() {
             @Override
-            public void onResponse(Call<Venue> call, Response<Venue> response) {
+            public void onResponse(Call<NearVenuesResponse> call, Response<NearVenuesResponse> response) {
                 if (response.code() == 200) {
-                    venues = response.body();
-                    for (int i = 0; i < venues.size(); i++) {
-                        adapter.notifyItemChanged(i);
-                    }
+                    venuesResponse = response.body();
+                    venues = venuesResponse.getResponse().getVenues();
+                    adapter = new VenuesAdapter(venues, R.layout.venue_card, MainActivity.this, new VenuesAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Venue venue, int position, View view) {
+                            //Toast.makeText(MainActivity.this, venue.getName(), Toast.LENGTH_SHORT).show();
+                            Intent detailIntent = new Intent(MainActivity.this, DetailVenueActivity.class);
+                            detailIntent.putExtra("venue",venue);
+                            startActivity(detailIntent);
+                        }
+                    });
+                    recyclerView.setAdapter(adapter);
 
-                    System.out.println("venues: "+venues.size());
-                    System.out.println("count: "+adapter.getItemCount());
-
+                    System.out.println("SIZE:"+venues.size());
+                    System.out.println("count:"+adapter.getItemCount());
                     //getVenueDetails();
                 }
             }
             @Override
-            public void onFailure(Call<Venue> call, Throwable t) {
+            public void onFailure(Call<NearVenuesResponse> call, Throwable t) {
                 Toast.makeText(MainActivity.this,"No internet connection, try later...",Toast.LENGTH_LONG).show();
             }
         });
@@ -149,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         for (int i = 0; i < venues.size(); i++) {
             String id  = venues.get(i).getId();
             System.out.println("Venue details");
-            Call<JSONObject> venueDetails = services2.getVenueInfo(id,token, API.API_VERSION);
+            Call<JSONObject> venueDetails = services.getVenueInfo(id,token, API.API_VERSION);
 
             venueDetails.enqueue(new Callback<JSONObject>() {
                 @Override

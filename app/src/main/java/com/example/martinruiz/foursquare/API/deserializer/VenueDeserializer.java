@@ -1,23 +1,9 @@
 package com.example.martinruiz.foursquare.API.deserializer;
 
-import com.example.martinruiz.foursquare.models.Category;
-import com.example.martinruiz.foursquare.models.Location;
-import com.example.martinruiz.foursquare.models.Venue;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by MartinRuiz on 9/24/2017.
  */
-
+/*
 public class VenueDeserializer implements JsonDeserializer<ArrayList<Venue>> {
     @Override
     public ArrayList<Venue> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -49,12 +35,13 @@ public class VenueDeserializer implements JsonDeserializer<ArrayList<Venue>> {
             System.out.println(category.getIconSuffix());
             System.out.println("-------------------------------");
             */
+            /*
             venues.add(new Venue(id,name,location,category));
         }
         return venues;
     }
 
-    private Category getCategory(JsonObject venueElement) {
+    /*private Category getCategory(JsonObject venueElement) {
         String id, name, iconPrefix, iconSuffix;
         id = venueElement.getAsJsonObject().get("categories").getAsJsonArray().get(0).getAsJsonObject().get("id").getAsString();
         name = venueElement.getAsJsonObject().get("categories").getAsJsonArray().get(0).getAsJsonObject().get("name").getAsString();
@@ -62,7 +49,9 @@ public class VenueDeserializer implements JsonDeserializer<ArrayList<Venue>> {
         iconSuffix = venueElement.getAsJsonObject().get("categories").getAsJsonArray().get(0).getAsJsonObject().get("icon").getAsJsonObject().get("suffix").getAsString();
 
         return new Category(id,name,iconPrefix,iconSuffix);
-    }
+    }*/
+
+            /*
 
     private Location getLocation(JsonObject venueElement) {
         String address ="Unknown";
@@ -87,3 +76,4 @@ public class VenueDeserializer implements JsonDeserializer<ArrayList<Venue>> {
 
     }
 }
+*/

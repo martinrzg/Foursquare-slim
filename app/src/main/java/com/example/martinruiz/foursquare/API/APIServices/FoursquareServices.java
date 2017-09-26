@@ -1,8 +1,6 @@
 package com.example.martinruiz.foursquare.API.APIServices;
 
-import android.support.annotation.Nullable;
-
-import com.example.martinruiz.foursquare.models.Venue;
+import com.example.martinruiz.foursquare.models.nearVenuesResponse.NearVenuesResponse;
 
 import org.json.JSONObject;
 
@@ -18,9 +16,9 @@ import retrofit2.http.Query;
 public interface FoursquareServices {
 
     @GET("venues/search")
-    Call<Venue> getNearVenues (@Query("ll") String ll, @Query("venuePhoto")int venuePhoto,
-                               @Query("oauth_token") String token, @Query("v") String version,
-                               @Query("limit") int limit);
+    Call<NearVenuesResponse> getNearVenues (@Query("ll") String ll, @Query("venuePhoto")int venuePhoto,
+                                            @Query("oauth_token") String token, @Query("v") String version);
+    //@Query("limit") int limit
 
     @GET("venues/{id}")
     Call<JSONObject> getVenueInfo(@Path("id") String id, @Query("oauth_token") String token, @Query("v") String version );

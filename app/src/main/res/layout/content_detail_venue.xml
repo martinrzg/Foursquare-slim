@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.martinruiz.foursquare.activities.DetailVenueActivity"
+    tools:showIn="@layout/activity_detail_venue">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewDetailAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Address: "/>
+
+        <TextView
+            android:id="@+id/textViewDetailCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Category: " />
+        <TextView
+            android:id="@+id/textViewDetailDistance"
+            android:padding="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Distance: "/>
+        <TextView
+            android:id="@+id/textViewDetailCheckins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Checkins: "/>
+
+        <ImageView
+            android:id="@+id/imageViewDetailCategory"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:padding="16dp"
+            android:src="@mipmap/ic_material"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimaryDark"
+            />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.martinruiz.foursquare.R;
-import com.example.martinruiz.foursquare.models.Venue;
+import com.example.martinruiz.foursquare.models.nearVenuesResponse.Venue;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -69,11 +69,13 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
 
         public void bind(final Venue venue, final OnItemClickListener onItemClickListener ){
             textViewVenueName.setText(venue.getName());
-            textViewVenueCategory.setText(venue.getCategory().getName());
+            textViewVenueCategory.setText(venue.getCategories().get(0).getName());
             textViewVenuePrice.setText("$$$");
-            textViewVenueDistance.setText(""+venue.getLocation().getDistance());
+            double distance = (venue.getLocation().getDistance()/1000);
+            String distanceS = String.format("%.2f%s",distance,"km");
+            textViewVenueDistance.setText(distanceS);
             textViewVenueAddress.setText(venue.getLocation().getAddress());
-            Picasso.with(activity).load(venue.getCategory().getIconPrefix()+"64"+venue.getCategory().getIconSuffix()).into(imageViewVenueCategory);
+            Picasso.with(activity).load(venue.getCategories().get(0).getIcon().getPrefix()+"64"+venue.getCategories().get(0).getIcon().getSuffix()).into(imageViewVenueCategory);
 
             cardViewVenue.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,6 +83,7 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
                     onItemClickListener.onItemClick(venue, getAdapterPosition() , cardViewVenue);
                 }
             });
+
         }
     }
 
